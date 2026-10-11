@@ -1,0 +1,60 @@
+{
+  "mcpServers": {
+    "sequentialthinking": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking@1.0.0"]
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@4.3.0"]
+    },
+    "fetch": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mcp-fetch-server@1.1.2"]
+    },
+    "codebase-memory": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "codebase-memory-mcp@0.11.0"]
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@0.0.83"]
+    },
+    "dbhub": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@bytebase/dbhub@1.5.0", "--transport", "stdio", "--config", "${CLAUDE_PLUGIN_ROOT}/config/dbhub.toml"],
+      "env": { "BOSSDREAM_DSN": "${user_config.db_dsn}" }
+    },
+    "a11y": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "a11y-mcp@1.1.0"]
+    },
+    "mdn": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mdn-mcp@1.0.0"]
+    },
+    "colors": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@colorsandfonts/mcp@1.1.0"]
+    },
+    "mermaid": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mcp-mermaid@0.4.1"]
+    },
+    "serena": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/oraios/serena@v1.7.0", "serena", "start-mcp-server", "--context", "claude-code", "--project-from-cwd", "--open-web-dashboard", "false"]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "bossdream-dotnet",
+  "displayName": "BossDream Dotnet Integration",
+  "version": "0.1.0",
+  "description": "Pack de lenguaje .NET: pipeline, CI, editorconfig, permisos y snippet de CLAUDE.md para proyectos dotnet.",
+  "author": { "name": "Miguel Rendón", "email": "miguel.a.l.rendon@gmail.com" },
+  "license": "MIT",
+  "keywords": ["dotnet", "csharp", "stack-pack", "language-pack"]
+}

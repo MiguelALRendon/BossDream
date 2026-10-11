@@ -1,0 +1,11 @@
+{
+  "gates": [
+    { "id": "pipeline", "required": true, "check": "pipeline --local", "blocking": "hard" },
+    { "id": "tasks", "required": true, "check": "tasks-complete", "blocking": "hard" },
+    { "id": "evidence", "required": false, "goal": "transcript shows 'pipeline OK' and audit verdicts" },
+    { "id": "semantic-verify", "required": false, "agent": "bossdream-endless-verifier", "when": "nontrivial" },
+    { "id": "qa-manager", "required": true, "agent": "bossdream-qa-planner", "when": "qa-increment", "blocking": "hard" }
+  ],
+  "maxBlocks": 8,
+  "onExhausted": "handoff-report"
+}

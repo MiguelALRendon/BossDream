@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build*)",
+      "Bash(dotnet format*)",
+      "Bash(dotnet test*)",
+      "Bash(dotnet stryker*)"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "stages": [
+    { "id": "build", "order": 1, "cmd": "npx tsc --noEmit", "tier": "local", "blocking": "hard" },
+    { "id": "format", "order": 2, "cmd": "npx prettier --check .", "tier": "local", "blocking": "hard" },
+    { "id": "theme-check", "order": 3, "internal": "style-check", "tier": "local", "blocking": "hard", "requiresStyle": true },
+    { "id": "gherkin", "order": 4, "internal": "gherkin-check", "tier": "local", "blocking": "hard" },
+    { "id": "arch", "order": 5, "cmd": "npx dependency-cruiser --validate src", "tier": "local", "blocking": "hard", "enabled": false },
+    { "id": "unit", "order": 6, "cmd": "npx vitest run --coverage", "tier": "local", "blocking": "hard", "requiresTesting": true },
+    { "id": "integration", "order": 7, "cmd": "npx vitest run tests/integration", "tier": "ci", "blocking": "hard", "enabled": false },
+    { "id": "bdd", "order": 8, "cmd": "npx cucumber-js", "tier": "ci", "blocking": "hard", "requiresBdd": true },
+    { "id": "e2e", "order": 9, "cmd": "npx playwright test", "tier": "ci", "blocking": "hard", "enabled": false },
+    { "id": "mutation", "order": 10, "cmd": "npx stryker run", "tier": "local", "blocking": "hard", "requiresTesting": true },
+    { "id": "docdrift", "order": 11, "internal": "docdrift-check", "tier": "ci", "blocking": "soft", "enabled": false }
+  ]
+}

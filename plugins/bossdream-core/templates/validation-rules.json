@@ -1,0 +1,38 @@
+{
+  "ambiguityQuestionThreshold": 3,
+  "stuckThreshold": 3,
+  "batchSize": 12,
+  "weakVocabulary": ["TBD", "etc.", "adecuado", "apropiado", "varios", "algunos", "segun corresponda", "lo necesario", "lo que aplique"],
+  "documentTypes": {
+    "requirements.md": {
+      "requiredSections": [
+        "Reglas de negocio relevantes",
+        "User Stories — siempre presente",
+        "Tabla resumen de trazabilidad"
+      ],
+      "semanticQuestions": [
+        "¿Hay contradiccion entre las Reglas de negocio relevantes y los criterios de aceptacion de alguna User Story?",
+        "¿Alguna User Story introduce alcance que ninguna Regla de negocio ni Feature/Epic respalda?",
+        "¿Los criterios de aceptacion son verificables sin ambiguedad, sin mezclar varios criterios en uno?"
+      ]
+    },
+    "tests/test-approach.md": {
+      "requiredSections": [
+        "1. Cuándo usar checklist vs. casos de prueba formales",
+        "2. Checklist de smoke test (Simple, y como base en Medio/Complejo)",
+        "7. Resumen de evidencia para cierre de QA"
+      ],
+      "semanticQuestions": [
+        "¿El enfoque de pruebas cubre todos los AC de requirements.md?",
+        "¿Hay AC sin ningun TC vinculado (huerfanos)?"
+      ]
+    },
+    "TC": {
+      "requiredFields": ["Escenario", "Precondiciones", "Datos de prueba", "Pasos", "Resultado esperado", "Resultado obtenido", "Evidencia", "Estado"],
+      "semanticQuestions": [
+        "¿Precondiciones/pasos/resultado esperado estan sin ambiguedad?",
+        "¿El TC prueba exactamente un AC, no varios criterios mezclados?"
+      ]
+    }
+  }
+}

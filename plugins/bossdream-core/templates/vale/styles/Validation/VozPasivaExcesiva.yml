@@ -1,0 +1,6 @@
+extends: existence
+message: "Posible voz pasiva excesiva: '%s' — prefiere voz activa y un responsable claro cuando sea posible."
+level: suggestion
+ignorecase: true
+tokens:
+  - '(fue|fueron|es|son|será|serán)\s+\w+(ado|ada|ados|adas|ido|ida|idos|idas)\s+por'

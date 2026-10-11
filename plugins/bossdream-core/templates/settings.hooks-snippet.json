@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/validation-lock.ps1\"", "timeout": 15 }
+        ]
+      },
+      {
+        "hooks": [
+          { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/plan-context-inject.ps1\"", "timeout": 15 }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      { "matcher": "Edit|Write|MultiEdit", "hooks": [
+        { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/mark-project-dirty.ps1\"", "timeout": 10 }
+      ]}
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/project-sync.ps1\"", "timeout": 60 }
+        ]
+      }
+    ]
+  }
+}

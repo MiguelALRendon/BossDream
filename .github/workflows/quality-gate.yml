@@ -1,0 +1,55 @@
+name: quality-gate
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+jobs:
+  plugins-ps51:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PowerShell modules
+        shell: powershell
+        run: |
+          Install-Module Pester -Scope CurrentUser -Force -SkipPublisherCheck
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+      - name: Lint (PSScriptAnalyzer)
+        shell: powershell
+        run: |
+          $r = Invoke-ScriptAnalyzer -Path plugins -Recurse -Severity Error -ExcludeRule PSUseDeclaredVarsMoreThanAssignments
+          if ($r) { $r | Format-Table -AutoSize | Out-String | Write-Output; exit 1 }
+      - name: Pester del plugin bajo Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          $r = Invoke-Pester -Path plugins/bossdream-core/tests -CI -PassThru
+          if ($r.FailedCount -gt 0) { exit 1 }
+
+  plugin-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pester del plugin bajo PowerShell 7
+        shell: pwsh
+        run: |
+          Install-Module Pester -Scope CurrentUser -Force -SkipPublisherCheck
+          $r = Invoke-Pester -Path plugins/bossdream-core/tests -CI -PassThru
+          if ($r.FailedCount -gt 0) { exit 1 }
+
+  validate-manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalar Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Validar marketplace y plugins
+        run: |
+          claude plugin validate .claude-plugin/marketplace.json
+          for p in plugins/*/; do claude plugin validate "$p"; done

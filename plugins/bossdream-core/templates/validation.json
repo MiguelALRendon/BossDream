@@ -1,0 +1,8 @@
+{
+  "overallStatus": "blocked",
+  "exemptions": [],
+  "documents": {
+    "requirements.md": { "status": "pending", "checks": [] },
+    "tests/test-approach.md": { "status": "pending", "checks": [] }
+  }
+}

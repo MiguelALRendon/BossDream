@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BossDream · Documentación</title>
+<meta name="description" content="Documentación de BossDream, framework de control de calidad para Claude Code basado en hooks deterministas.">
+<meta name="theme-color" content="#0b0a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%238b5cf6'/%3E%3Cpath d='M9 8h8a5 5 0 010 8H9zm0 8h9a5 5 0 010 8H9z' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Familjen+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>
+try { var t = localStorage.getItem('bd-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body>
+<div id="particles" aria-hidden="true"></div>
+<div class="glow glow-a" aria-hidden="true" data-speed="0.15"></div>
+<div class="glow glow-b" aria-hidden="true" data-speed="-0.1"></div>
+
+<header class="topbar">
+  <a class="brand" href="#inicio" data-tab-link="inicio">
+    <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M9 8h8a5 5 0 010 8H9zm0 8h9a5 5 0 010 8H9z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg></span>
+    <span class="brand-name">Boss<b>Dream</b></span>
+  </a>
+  <button class="search-trigger" id="open-search" type="button" aria-label="Buscar en toda la documentación">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.3-4.3"/></svg>
+    <span class="hide-sm">Buscar skills, comandos, agentes…</span>
+    <kbd class="hide-sm">Ctrl K</kbd>
+  </button>
+  <div class="top-actions">
+    <button class="icon-btn" id="theme-toggle" type="button" aria-label="Cambiar tema">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+    </button>
+    <a class="icon-btn" href="https://github.com/MiguelALRendon/BossDream" target="_blank" rel="noopener" aria-label="Repositorio en GitHub">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 00-1.3-3.2 4.2 4.2 0 00-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 00-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 00-.1 3.2A4.6 4.6 0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+    </a>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs" aria-label="Secciones"></nav>
+
+<main id="main">
+
+<section class="panel" data-tab="inicio" aria-labelledby="t-inicio">
+  <div class="hero">
+    <p class="eyebrow reveal">Documentación técnica</p>
+    <h1 id="t-inicio" class="reveal">BossDream</h1>
+    <p class="lead reveal">Framework de control de calidad para Claude Code. Las reglas se aplican mediante hooks que ejecuta el propio Claude Code, no mediante instrucciones en el prompt, y el agente solo puede dar una tarea por terminada cuando el pipeline pasa y existe evidencia de ello.</p>
+    <p class="typed reveal" aria-live="off"><span class="typed-prefix">$</span> <span id="typed"></span><span class="caret"></span></p>
+    <div class="cta reveal">
+      <a class="btn primary" href="#instalar" data-tab-link="instalar">Guía de instalación</a>
+      <a class="btn" href="#flujos" data-tab-link="flujos">Flujos de trabajo</a>
+    </div>
+    <dl class="stats reveal" id="stats"></dl>
+  </div>
+
+  <h2 class="section-title reveal">Principios de diseño del motor</h2>
+  <div class="cards tenets">
+    <article class="card spot reveal"><span class="num">01</span><h3>Las reglas son código</h3><p>Una regla implementada como script determinista no depende de que el modelo la recuerde, y no consume tokens.</p></article>
+    <article class="card spot reveal"><span class="num">02</span><h3>Auditoría independiente</h3><p>Quien implementa no valida su propio trabajo. Los auditores corren en un contexto separado y devuelven un veredicto estructurado.</p></article>
+    <article class="card spot reveal"><span class="num">03</span><h3>Completitud y sobriedad</h3><p>La escalera anti-sobreingeniería y la autorevisión del plan: cada paso con su fuente y su porqué.</p></article>
+    <article class="card spot reveal"><span class="num">04</span><h3>Sin afirmaciones sin sustento</h3><p>Toda afirmación debe anclarse en el código o en lo que dijo el usuario. Ante una ambigüedad, el agente pregunta en una sola tanda.</p></article>
+    <article class="card spot reveal"><span class="num">05</span><h3>Falla rápida</h3><p>Las etapas baratas (build, formato) corren antes que las caras (E2E, mutation testing). Si una falla, no se ejecutan las siguientes.</p></article>
+    <article class="card spot reveal"><span class="num">06</span><h3>Consumo de tokens acotado</h3><p>Scripts en lugar de instrucciones, subagentes de contexto desechable, exploración en cascada y una sola línea de salida cuando todo pasa.</p></article>
+    <article class="card spot reveal"><span class="num">07</span><h3>Separación entre plan e implementación</h3><p><code>/bossdream-plan</code> no puede escribir código. Solo el usuario cruza la frontera con <code>/bossdream-implement</code>.</p></article>
+    <article class="card spot reveal"><span class="num">08</span><h3>El motor no sabe de tu stack</h3><p>Lee <code>pipeline.json</code>. Los comandos concretos los aporta un pack de lenguaje.</p></article>
+  </div>
+
+  <h2 class="section-title reveal">Arquitectura de plugins</h2>
+  <div class="arch reveal" id="arch"></div>
+</section>
+
+<section class="panel" data-tab="instalar" aria-labelledby="t-instalar" hidden>
+  <header class="panel-head"><p class="eyebrow">Primeros pasos</p><h2 id="t-instalar">Instalación</h2><p class="lead">Desde el marketplace hasta el primer plan, en cinco pasos.</p></header>
+
+  <ol class="steps">
+    <li class="step reveal"><span class="step-n">1</span><div><h3>Requisitos</h3>
+      <div class="table-wrap"><table><thead><tr><th>Requisito</th><th>Detalle</th></tr></thead><tbody>
+        <tr><td>Claude Code</td><td>Versión con soporte de plugins, hooks y skills (<code>/plugin</code>).</td></tr>
+        <tr><td>PowerShell 7 (<code>pwsh</code>)</td><td>Obligatorio en Windows, Linux y macOS. Windows: <code>winget install Microsoft.PowerShell</code>.</td></tr>
+        <tr><td>Node.js y uv</td><td>Los MCP usan <code>npx</code>; solo Serena usa <code>uvx</code>.</td></tr>
+        <tr><td>git</td><td>Para instalar desde el marketplace.</td></tr>
+        <tr><td>Runtime del stack</td><td>.NET SDK con <code>bossdream-dotnet</code>, Node con <code>bossdream-nodejs</code>.</td></tr>
+      </tbody></table></div>
+      <p class="note">Probado en Windows (PowerShell 5.1 y 7) y Ubuntu con CI en cada push. <strong>macOS no se ha probado.</strong></p>
+    </div></li>
+    <li class="step reveal"><span class="step-n">2</span><div><h3>Añade el marketplace e instala el motor</h3>
+      <div class="code" data-copy><pre><code>/plugin marketplace add MiguelALRendon/BossDream
+/plugin install "bossdream-core"@bossdream</code></pre></div></div></li>
+    <li class="step reveal"><span class="step-n">3</span><div><h3>Instala el pack de tu lenguaje (solo uno)</h3>
+      <div class="code" data-copy><pre><code>/plugin install "bossdream-dotnet"@bossdream
+/plugin install "bossdream-nodejs"@bossdream
+/reload-plugins</code></pre></div>
+      <p class="note">Elige una de las dos primeras líneas. Instalar ambos solo tiene sentido en un monorepo real.</p></div></li>
+    <li class="step reveal"><span class="step-n">4</span><div><h3>Responde la configuración</h3>
+      <div class="table-wrap"><table><thead><tr><th>Opción</th><th>Qué es</th><th>Default</th></tr></thead><tbody>
+        <tr><td><code>db_dsn</code></td><td>DSN de una base SQL que <code>dbhub</code> consulta <strong>solo en lectura</strong>. Se guarda en el keychain.</td><td>vacío</td></tr>
+        <tr><td><code>enable_read_budget_hook</code></td><td>Reencamina lecturas y búsquedas amplias para ahorrar tokens.</td><td><code>true</code></td></tr>
+      </tbody></table></div></div></li>
+    <li class="step reveal"><span class="step-n">5</span><div><h3>Inicializa tu proyecto</h3>
+      <div class="code" data-copy><pre><code>/bossdream-init</code></pre></div>
+      <p>Es idempotente y no pisa lo que ya tengas. Copia los hooks a <code>.claude/bossdream-hooks/</code>, fusiona <code>settings.json</code> y te dice qué rellenar: <code>docs/constitution.md</code> y tus notas en <code>docs/_inbox/</code>.</p>
+      <div class="code" data-copy><pre><code>/docs-rewrite
+/plan-new mi-feature
+/bossdream-plan quiero exportar facturas a Excel</code></pre></div></div></li>
+  </ol>
+
+  <div class="two-col">
+    <div class="card reveal"><h3>Actualizar</h3><div class="code" data-copy><pre><code>/plugin marketplace update bossdream
+/reload-plugins
+/bossdream-sync</code></pre></div></div>
+    <div class="card reveal"><h3>Desinstalar</h3><div class="code" data-copy><pre><code>/plugin uninstall "bossdream-core"@bossdream</code></pre></div></div>
+  </div>
+
+  <h2 class="section-title reveal">Ciclo de trabajo completo</h2>
+  <ol class="timeline">
+    <li class="reveal"><b>Solicitud de la funcionalidad.</b> El agente detecta que no es trivial y activa <code>/brainstorming</code> para acordar el diseño.</li>
+    <li class="reveal"><b>Plan por increments.</b> Cada increment pasa su revisión de diseño antes de escribirse a <code>plan.md</code>.</li>
+    <li class="reveal"><b>Inicio de la implementación.</b> <code>/bossdream-implement</code> ejecuta un increment y se detiene a pedir permiso.</li>
+    <li class="reveal"><b>Verificación con el hook Stop.</b> Si el pipeline falla, el agente continúa trabajando y no puede dar la tarea por terminada.</li>
+    <li class="reveal"><b>Cierre.</b> Verificación final y regreso a modo plan. El agente nunca hace commit; esa decisión es del usuario.</li>
+  </ol>
+</section>
+
+<section class="panel" data-tab="comandos" aria-labelledby="t-comandos" hidden>
+  <header class="panel-head"><p class="eyebrow">Referencia</p><h2 id="t-comandos">Comandos</h2><p class="lead" id="lead-comandos"></p></header>
+  <div class="toolbar"><input class="filter" type="search" placeholder="Filtrar comandos…" data-list="comandos" aria-label="Filtrar comandos"><div class="chips" data-chips="comandos"></div></div>
+  <div class="cards list" id="list-comandos"></div>
+</section>
+
+<section class="panel" data-tab="skills" aria-labelledby="t-skills" hidden>
+  <header class="panel-head"><p class="eyebrow">Referencia</p><h2 id="t-skills">Skills</h2><p class="lead" id="lead-skills"></p></header>
+  <div class="toolbar"><input class="filter" type="search" placeholder="Filtrar skills…" data-list="skills" aria-label="Filtrar skills"><div class="chips" data-chips="skills"></div></div>
+  <div class="cards list" id="list-skills"></div>
+</section>
+
+<section class="panel" data-tab="agentes" aria-labelledby="t-agentes" hidden>
+  <header class="panel-head"><p class="eyebrow">Referencia</p><h2 id="t-agentes">Agentes</h2><p class="lead" id="lead-agentes"></p></header>
+  <div class="toolbar"><input class="filter" type="search" placeholder="Filtrar agentes…" data-list="agentes" aria-label="Filtrar agentes"><div class="chips" data-chips="agentes"></div></div>
+  <div class="cards list" id="list-agentes"></div>
+</section>
+
+<section class="panel" data-tab="flujos" aria-labelledby="t-flujos" hidden>
+  <header class="panel-head"><p class="eyebrow">Referencia</p><h2 id="t-flujos">Flujos de trabajo</h2><p class="lead">Cada flujo muestra su diagrama y tres listas: qué entra, qué se invoca y qué produce.</p></header>
+  <div class="flow-picker" id="flow-picker" role="tablist" aria-label="Flujos"></div>
+  <div id="flow-view"></div>
+</section>
+
+<section class="panel" data-tab="pipeline" aria-labelledby="t-pipeline" hidden>
+  <header class="panel-head"><p class="eyebrow">Referencia</p><h2 id="t-pipeline">Pipeline de calidad</h2><p class="lead">Once etapas ordenadas por costo de ejecución. El motor es agnóstico: los comandos los aporta el pack de lenguaje.</p></header>
+  <div class="seg" id="pipeline-seg" role="tablist" aria-label="Stack"><button type="button" data-stack="nodejs" class="on">Node / TypeScript</button><button type="button" data-stack="dotnet">.NET</button></div>
+  <div class="table-wrap reveal"><table id="pipeline-table"></table></div>
+  <p class="note">Tier <b>local</b>: lo corre el Stop hook, en segundos. Tier <b>ci</b>: lo corre el CI completo. Las etapas apagadas exigen infraestructura que ningún template puede asumir. Mutation testing es de bloqueo duro con <code>testing.enabled=true</code>.</p>
+  <h2 class="section-title reveal">Completion Criteria</h2>
+  <div class="code reveal" data-copy><pre><code id="completion-json"></code></pre></div>
+</section>
+
+<section class="panel" data-tab="templates" aria-labelledby="t-templates" hidden>
+  <header class="panel-head"><p class="eyebrow">Referencia</p><h2 id="t-templates">Templates</h2><p class="lead">Archivos que <code>/bossdream-init</code> copia al proyecto, con su contenido real.</p></header>
+  <div class="seg" id="tpl-seg" role="tablist" aria-label="Plugin"><button type="button" data-pl="core" class="on">bossdream-core</button><button type="button" data-pl="dotnet">bossdream-dotnet</button><button type="button" data-pl="nodejs">bossdream-nodejs</button></div>
+  <div class="tpl">
+    <ul class="tpl-tree" id="tpl-tree"></ul>
+    <div class="tpl-view"><div class="tpl-head"><code id="tpl-name">Selecciona un archivo</code><button class="btn small" id="tpl-copy" type="button" hidden>Copiar</button></div><p class="note" id="tpl-note"></p><pre class="tpl-code"><code id="tpl-code"></code></pre></div>
+  </div>
+</section>
+
+<section class="panel" data-tab="mcp" aria-labelledby="t-mcp" hidden>
+  <header class="panel-head"><p class="eyebrow">Referencia</p><h2 id="t-mcp">MCP incluidos</h2><p class="lead" id="lead-mcp"></p></header>
+  <div class="cards list" id="list-mcp"></div>
+  <p class="note">Versiones fijadas en <code>plugins/bossdream-core/.mcp.json</code>. Los agentes los usan con <code>mcp__plugin_bossdream-core_&lt;servidor&gt;</code>. <code>dbhub</code> solo arranca si configuraste <code>db_dsn</code> y siempre en solo lectura. <code>a11y</code> solo acepta URLs http(s).</p>
+</section>
+
+<section class="panel" data-tab="config" aria-labelledby="t-config" hidden>
+  <header class="panel-head"><p class="eyebrow">Referencia</p><h2 id="t-config">Configuración</h2><p class="lead">Archivos de proyecto, hooks y mecanismos de excepción.</p></header>
+  <div class="table-wrap reveal"><table><thead><tr><th>Archivo</th><th>Dónde</th><th>Para qué</th></tr></thead><tbody>
+    <tr><td><code>bossdream.json</code></td><td>raíz</td><td>plan-lock, extensiones de código, pruebas, estilos, <code>qa.mode</code> y ruteo de modelos</td></tr>
+    <tr><td><code>pipeline.json</code></td><td>raíz</td><td>Etapas del pipeline y toggles</td></tr>
+    <tr><td><code>completion.json</code></td><td>raíz</td><td>Gates del Completion Criteria y <code>maxBlocks</code></td></tr>
+    <tr><td><code>.claude/settings.json</code></td><td>proyecto, versionado</td><td>Plugins, permisos, marketplace y hooks</td></tr>
+    <tr><td><code>.claude/settings.local.json</code></td><td>proyecto, ignorado</td><td>Overrides personales</td></tr>
+    <tr><td><code>.claude/rules/comentarios.md</code></td><td>proyecto</td><td>Regla de comentarios</td></tr>
+  </tbody></table></div>
+  <h2 class="section-title reveal">Hooks</h2>
+  <div class="table-wrap reveal"><table><thead><tr><th>Hook</th><th>Evento</th><th>Qué hace</th></tr></thead><tbody>
+    <tr><td><code>readiness</code></td><td>UserPromptSubmit</td><td>Fija <code>.work-mode</code> según el comando y recuerda crear <code>plans/</code></td></tr>
+    <tr><td><code>active-project-context</code></td><td>UserPromptSubmit</td><td>Inyecta el contexto del proyecto activo</td></tr>
+    <tr><td><code>plan-lock</code></td><td>PreToolUse · Edit, Write</td><td>Niega editar código en modo no editable o sin spec en rutas de dominio</td></tr>
+    <tr><td><code>comment-check</code></td><td>PreToolUse · Edit, Write</td><td>Niega bloques multilínea, separadores decorativos y breadcrumbs de IA</td></tr>
+    <tr><td><code>command-lock</code></td><td>PreToolUse · Bash</td><td>Niega <code>rm -rf /</code>, <code>git reset --hard</code>, <code>git push --force</code></td></tr>
+    <tr><td><code>read-budget</code></td><td>PreToolUse · Read, Grep, Glob</td><td>Reencamina lecturas amplias (opcional)</td></tr>
+    <tr><td><code>mark-dirty</code></td><td>PostToolUse</td><td>Marca que el turno editó código</td></tr>
+    <tr><td><code>sync-agent-models</code></td><td>PostToolUse</td><td>Sincroniza el modelo de cada agente con <code>bossdream.json</code></td></tr>
+    <tr><td><code>stop-completion</code></td><td>Stop</td><td>Evalúa el Completion Criteria y bloquea el cierre si falla</td></tr>
+    <tr><td><code>validation-lock</code> · <code>plan-context-inject</code></td><td>UserPromptSubmit</td><td>Gobernanza: bloquean o alimentan <code>/bossdream-plan</code> según el Document Validation</td></tr>
+    <tr><td><code>mark-project-dirty</code> · <code>project-sync</code></td><td>PostToolUse · Stop</td><td>Gobernanza: reabren documentos editados y regeneran la trazabilidad</td></tr>
+  </tbody></table></div>
+  <h2 class="section-title reveal">Mecanismos de excepción</h2>
+  <div class="cards">
+    <article class="card spot reveal"><h3>Saltar el gate una vez</h3><p><code>/pipeline skip --reason "…"</code> queda registrado, no es silencioso.</p></article>
+    <article class="card spot reveal"><h3>Apagar el hook de tokens</h3><p><code>enable_read_budget_hook: false</code> al configurar el plugin.</p></article>
+    <article class="card spot reveal"><h3>Desbloquear la gobernanza</h3><p><code>/bossdream-override</code> destraba una invocación bloqueada por <code>validation-lock</code>.</p></article>
+    <article class="card spot reveal"><h3>Modo nuclear</h3><p><code>"disableAllHooks": true</code> en <code>settings.json</code>. Desaconsejado y visible en la config.</p></article>
+  </div>
+</section>
+
+<section class="panel" data-tab="estado" aria-labelledby="t-estado" hidden>
+  <header class="panel-head"><p class="eyebrow">Estado actual</p><h2 id="t-estado">Estado del proyecto</h2><p class="lead">Qué está verificado, qué no lo está y qué deuda técnica se conoce.</p></header>
+  <div class="table-wrap reveal"><table id="plugins-table"></table></div>
+  <div class="cards status">
+    <article class="card reveal"><span class="pill ok">Probado</span><h3>Windows y Ubuntu</h3><p>Suite Pester verde en PowerShell 5.1, PowerShell 7 y Ubuntu 24.04. CI en <code>windows-latest</code> y <code>ubuntu-latest</code>.</p></article>
+    <article class="card reveal"><span class="pill ok">Probado</span><h3>Instalación desde GitHub</h3><p>Marketplace, instalación de plugins y <code>/bossdream-init</code> probados con una configuración limpia.</p></article>
+    <article class="card reveal"><span class="pill ok">Probado</span><h3>11 MCP en vivo</h3><p>Arrancan y listan sus herramientas. <code>dbhub</code> hizo un SELECT y rechazó un DELETE.</p></article>
+    <article class="card reveal"><span class="pill warn">Sin probar</span><h3>macOS</h3><p>No hay entorno para ejecutarlo. Los scripts son portables, pero no está verificado.</p></article>
+  </div>
+  <h2 class="section-title reveal">Deuda técnica conocida</h2>
+  <div class="cards list" id="list-debt"></div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <span>BossDream · <code>bossdream-core</code> v<span id="foot-version"></span></span>
+  <span><a href="https://github.com/MiguelALRendon/BossDream" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/MiguelALRendon/BossDream/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a></span>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="palette-box" role="dialog" aria-modal="true" aria-label="Buscar">
+    <input id="palette-input" type="search" placeholder="Busca un comando, skill, agente o MCP…" autocomplete="off">
+    <ul id="palette-results"></ul>
+    <p class="palette-hint"><kbd>↑</kbd><kbd>↓</kbd> navegar · <kbd>Enter</kbd> abrir · <kbd>Esc</kbd> cerrar</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="data/site-data.js"></script>
+<script src="js/flows.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@4.4.0/tsparticles.slim.bundle.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

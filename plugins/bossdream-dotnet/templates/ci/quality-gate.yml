@@ -1,0 +1,23 @@
+name: quality-gate
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+jobs:
+  pipeline:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build (warnings as errors)
+        shell: pwsh
+        run: dotnet build -warnaserror
+      - name: Format
+        shell: pwsh
+        run: dotnet format --verify-no-changes
+      - name: Test
+        shell: pwsh
+        run: dotnet test

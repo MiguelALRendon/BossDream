@@ -1,0 +1,7 @@
+{
+  "componentes": [
+    { "nombre": "assertion-breaker", "tipo": "agente", "reemplaza_a": "bossdream-qa-auditor" },
+    { "nombre": "bossdream-qa-auditor", "tipo": "agente", "reemplaza_a": null },
+    { "nombre": "bossdream-traceability-watcher", "tipo": "agente", "reemplaza_a": null }
+  ]
+}

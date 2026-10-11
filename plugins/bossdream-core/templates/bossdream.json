@@ -1,0 +1,68 @@
+{
+  "codeExtensions": [
+    ".css",
+    ".scss",
+    ".sql",
+    ".ps1"
+  ],
+  "planLock": {
+    "enabled": true,
+    "requirePaths": [],
+    "exemptPaths": [
+      "tests/**",
+      "docs/**",
+      "scripts/**",
+      "scratch/**",
+      "plans/**",
+      "**/*.md",
+      "**/*.feature"
+    ],
+    "exemptModes": [
+      "spike",
+      "explore",
+      "bugfix",
+      "chore",
+      "implement"
+    ],
+    "nonEditingModes": [
+      "plan",
+      "document",
+      "review"
+    ]
+  },
+  "testing": {
+    "enabled": true,
+    "bdd": false,
+    "project": "",
+    "coverage": "changed",
+    "exemptions": [
+      "accesores-simples",
+      "contenedores-de-datos",
+      "constructores-triviales",
+      "catalogos-repetidos",
+      "mapeos-1a1",
+      "autogenerado",
+      "cableado-configuracion",
+      "presentacion-ui"
+    ]
+  },
+  "style": {
+    "enabled": false,
+    "themeSource": "",
+    "vendorExempt": [],
+    "exemptions": [
+      "0",
+      "porcentajes",
+      "viewport",
+      "grid-fr",
+      "keywords"
+    ]
+  },
+  "qa": { "mode": "costoso" },
+  "models": {
+    "plan": "opus",
+    "code": "sonnet",
+    "audit": "haiku",
+    "quick": "haiku"
+  }
+}

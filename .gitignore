@@ -1,0 +1,10 @@
+﻿.claude/.active-project
+.claude/settings.local.json
+.claude/.completion-state.json
+.claude/.active-plan
+**/.claude/.work-mode
+**/.claude/.bossdream-dirty
+.claude/.line-budget.json
+testResults.xml
+plugins/*/testResults.xml
+.bossdream-project/

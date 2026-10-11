@@ -1,0 +1,13 @@
+extends: existence
+message: "Evita la palabra/frase débil '%s' — sé específico (lista inspirada en NASA ARM/QuARS)."
+level: warning
+ignorecase: true
+tokens:
+  - TBD
+  - 'etc\.'
+  - adecuad[oa]s?
+  - apropiad[oa]s?
+  - segun corresponda
+  - lo necesario
+  - lo que aplique
+  - lo que sea necesario

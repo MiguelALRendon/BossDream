@@ -1,0 +1,25 @@
+{
+  "name": "bossdream-core",
+  "displayName": "BossDream Complete Core",
+  "version": "1.0.0",
+  "description": "Motor agnostico de desarrollo asistido: Delivery Cycle, pipeline de calidad, Completion Criteria por hooks deterministas, documentacion IA-friendly, y gobernanza de documentos de negocio del SDLC (Understanding/Requirements/Test approach con Document Validation por documento).",
+  "author": { "name": "Miguel Rendón", "email": "miguel.a.l.rendon@gmail.com" },
+  "license": "MIT",
+  "keywords": ["workflow", "quality-gate", "definition-of-done", "docs-as-code", "enforcement", "sdlc", "business-requirements", "definition-of-ready"],
+  "mcpServers": "./.mcp.json",
+  "userConfig": {
+    "db_dsn": {
+      "type": "string",
+      "title": "DSN de base de datos (solo lectura)",
+      "description": "DSN de una base SQL (MySQL, MariaDB, PostgreSQL, SQL Server o SQLite) que dbhub consulta en modo solo lectura para validar hipotesis y verificar persistencia. Opcional. Se guarda en el keychain, no en settings.json.",
+      "sensitive": true,
+      "required": false
+    },
+    "enable_read_budget_hook": {
+      "type": "boolean",
+      "title": "Activar hook de presupuesto de contexto",
+      "description": "Reencamina lecturas/busquedas amplias en el hilo principal hacia acotar o delegar. Activado por defecto; desactivalo con `enable_read_budget_hook: false` si genera demasiadas confirmaciones.",
+      "default": true
+    }
+  }
+}

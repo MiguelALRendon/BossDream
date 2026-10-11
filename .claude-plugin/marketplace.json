@@ -1,0 +1,31 @@
+{
+  "name": "bossdream",
+  "description": "Framework de enforcement para Claude Code: calidad impuesta por hooks deterministas, no por el prompt.",
+  "owner": { "name": "Miguel Rendón", "email": "miguel.a.l.rendon@gmail.com" },
+  "plugins": [
+    {
+      "name": "bossdream-core",
+      "source": "./plugins/bossdream-core",
+      "description": "Motor agnostico de desarrollo asistido: Delivery Cycle, pipeline de calidad, Completion Criteria por hooks deterministas, documentacion IA-friendly, y gobernanza de documentos de negocio del SDLC (Understanding/Requirements/Test approach con Document Validation por documento).",
+      "version": "1.0.0",
+      "category": "workflow",
+      "author": { "name": "Miguel Rendón" }
+    },
+    {
+      "name": "bossdream-dotnet",
+      "source": "./plugins/bossdream-dotnet",
+      "description": "Pack de lenguaje .NET: pipeline, CI, editorconfig y permisos dotnet.",
+      "version": "0.1.0",
+      "category": "language-pack",
+      "author": { "name": "Miguel Rendón" }
+    },
+    {
+      "name": "bossdream-nodejs",
+      "source": "./plugins/bossdream-nodejs",
+      "description": "Pack de lenguaje Node/TS: pipeline, CI, editorconfig y permisos npm/npx (Vitest, Prettier, Playwright, Stryker JS).",
+      "version": "0.1.0",
+      "category": "language-pack",
+      "author": { "name": "Miguel Rendón" }
+    }
+  ]
+}

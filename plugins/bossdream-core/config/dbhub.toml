@@ -1,0 +1,9 @@
+[[sources]]
+id = "main"
+dsn = "${BOSSDREAM_DSN}"
+
+[[tools]]
+name = "execute_sql"
+source = "main"
+readonly = true
+max_rows = 1000

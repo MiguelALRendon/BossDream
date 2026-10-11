@@ -1,0 +1,11 @@
+flowchart TB
+  user([Usuario])
+  subgraph sistema[Sistema]
+    app[Aplicacion]
+  end
+  db[(Base de datos)]
+  ext[Servicios externos]
+
+  user --> app
+  app --> db
+  app --> ext

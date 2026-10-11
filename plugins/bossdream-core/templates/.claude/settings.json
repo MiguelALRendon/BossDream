@@ -1,0 +1,45 @@
+{
+  "extraKnownMarketplaces": {
+    "bossdream": { "source": { "source": "github", "repo": "MiguelALRendon/BossDream" } }
+  },
+  "enabledPlugins": {
+    "bossdream-core@bossdream": true
+  },
+  "permissions": {
+    "allow": [],
+    "deny": [
+      "Read(./.env)",
+      "Read(./**/secrets*.json)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [ { "type": "command", "command": "command -v pwsh >/dev/null 2>&1 || echo \"BossDream: falta PowerShell 7 (pwsh) y los hooks de calidad no se ejecutaran. Windows: winget install Microsoft.PowerShell. Linux/macOS: https://learn.microsoft.com/powershell/scripting/install/installing-powershell\"", "timeout": 10 } ] }
+    ],
+    "PreToolUse": [
+      { "matcher": "Edit|Write|MultiEdit", "hooks": [
+        { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/plan-lock.ps1\"", "timeout": 20 },
+        { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/comment-check.ps1\"", "timeout": 30 }
+      ]},
+      { "matcher": "Bash", "hooks": [
+        { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/command-lock.ps1\"", "timeout": 15 }
+      ]},
+      { "matcher": "Grep|Glob|Read", "hooks": [
+        { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/read-budget.ps1\"", "timeout": 15 }
+      ]}
+    ],
+    "PostToolUse": [
+      { "matcher": "Edit|Write|MultiEdit", "hooks": [
+        { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/mark-dirty.ps1\"", "timeout": 10 },
+        { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/sync-agent-models.ps1\"", "timeout": 15 }
+      ]}
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [ { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/readiness.ps1\"", "timeout": 15 } ] },
+      { "hooks": [ { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/active-project-context.ps1\"", "timeout": 15 } ] }
+    ],
+    "Stop": [
+      { "hooks": [ { "type": "command", "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/bossdream-hooks/stop-completion.ps1\"", "timeout": 600 } ] }
+    ]
+  }
+}

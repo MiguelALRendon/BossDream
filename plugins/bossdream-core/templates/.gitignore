@@ -1,0 +1,9 @@
+.claude/settings.local.json
+.claude/.completion-state.json
+.claude/.active-plan
+.claude/.work-mode
+.claude/.bossdream-dirty
+.claude/.line-budget.json
+bin/
+obj/
+StrykerOutput/

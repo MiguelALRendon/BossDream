@@ -1,0 +1,22 @@
+name: quality-gate
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      - name: Install
+        run: npm ci
+      - name: Build (type-check)
+        run: npx tsc --noEmit
+      - name: Format
+        run: npx prettier --check .
+      - name: Test
+        run: npx vitest run --coverage
