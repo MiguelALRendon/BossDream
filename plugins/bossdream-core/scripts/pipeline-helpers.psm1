@@ -40,7 +40,7 @@ function New-HardFailure($Condicion) {
 }
 
 function Get-DiffFileEntries($DiffPath) {
-  $lines = Get-Content $DiffPath
+  $lines = Get-Content -Encoding utf8 $DiffPath
   $files = [System.Collections.Generic.List[object]]::new()
   $current = $null
   foreach ($line in $lines) {
@@ -70,7 +70,7 @@ function Get-OtherPlanningArtifacts($ProjectDir, $ExcludeIdTarea) {
   $files = Get-ChildItem -Path $dir -Filter '*.artifact.json' -File -ErrorAction SilentlyContinue
   $out = [System.Collections.Generic.List[object]]::new()
   foreach ($f in @($files)) {
-    try { $artifact = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+    try { $artifact = Get-Content -Encoding utf8 $f.FullName -Raw | ConvertFrom-Json } catch { continue }
     if ($artifact.estado -eq 'consumido') { continue }
     if ($ExcludeIdTarea -and $artifact.id_tarea -eq $ExcludeIdTarea) { continue }
     $out.Add($artifact)

@@ -9,13 +9,15 @@ if (-not $file) { exit 0 }
 $proj = [string]$j.cwd
 if (-not $proj) { $proj = $env:CLAUDE_PROJECT_DIR }
 if (-not $proj) { exit 0 }
+Import-Module (Join-Path $PSScriptRoot 'plugin-paths.psm1')
+$proj = Get-ProjectRoot $proj
 
 # mode-lock: un modo NO-editable bloquea edicion de codigo y de archivos de control
 $nonEditing = @('plan', 'document', 'review')
-try { $c0 = Get-Content (Join-Path $proj 'bossdream.json') -Raw | ConvertFrom-Json; if ($c0.planLock.nonEditingModes) { $nonEditing = $c0.planLock.nonEditingModes } } catch {}
+try { $c0 = Get-Content -Encoding utf8 (Join-Path $proj 'bossdream.json') -Raw | ConvertFrom-Json; if ($c0.planLock.nonEditingModes) { $nonEditing = $c0.planLock.nonEditingModes } } catch {}
 $mf = Join-Path $proj '.claude/.work-mode'
 $mode = ''
-if (Test-Path $mf) { $mode = ((Get-Content $mf -Raw) -replace '[^a-zA-Z]', '').ToLower() }
+if (Test-Path $mf) { $mode = ((Get-Content -Encoding utf8 $mf -Raw) -replace '[^a-zA-Z]', '').ToLower() }
 if ($nonEditing -contains $mode) {
   $leaf = [System.IO.Path]::GetFileName($file).ToLower()
   $control = @('.work-mode', '.active-plan', 'bossdream.json')
@@ -36,7 +38,7 @@ if ($nonEditing -contains $mode) {
 
 $cfgPath = Join-Path $proj 'bossdream.json'
 if (-not (Test-Path $cfgPath)) { exit 0 }
-try { $cfg = Get-Content $cfgPath -Raw | ConvertFrom-Json } catch { exit 0 }
+try { $cfg = Get-Content -Encoding utf8 $cfgPath -Raw | ConvertFrom-Json } catch { exit 0 }
 $sg = $cfg.planLock
 if (-not $sg -or $sg.enabled -ne $true) { exit 0 }
 if (-not $sg.requirePaths -or $sg.requirePaths.Count -eq 0) { exit 0 }
@@ -63,13 +65,13 @@ if (-not $isDomain) { exit 0 }
 
 $modeFile = Join-Path $proj '.claude/.work-mode'
 if (Test-Path $modeFile) {
-  $mode = (Get-Content $modeFile -Raw).Trim().ToLower()
+  $mode = (Get-Content -Encoding utf8 $modeFile -Raw).Trim().ToLower()
   if ($sg.exemptModes -contains $mode) { exit 0 }
 }
 
 $active = Join-Path $proj '.claude/.active-plan'
 if (Test-Path $active) {
-  $f = (Get-Content $active -Raw).Trim()
+  $f = (Get-Content -Encoding utf8 $active -Raw).Trim()
   if ($f) { exit 0 }
 }
 

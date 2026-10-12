@@ -12,7 +12,7 @@ if (-not $ProjectSlug) {
     Write-Output "bossdream-learning-publish BLOCKED: no hay proyecto activo (.claude/.active-project) y no se paso -ProjectSlug."
     exit 1
   }
-  $ProjectSlug = (Get-Content $activeProjectFile -Raw).Trim()
+  $ProjectSlug = (Get-Content -Encoding utf8 $activeProjectFile -Raw).Trim()
 }
 
 $dotDir = Join-Path $ProjectDir "bossdream_projects/$ProjectSlug/.bossdream-project"
@@ -26,7 +26,7 @@ if (-not (Test-Path $logPath)) {
   exit 1
 }
 
-$aprobaciones = @(Get-Content $logPath | Where-Object { $_.Trim().Length -gt 0 } | ForEach-Object { $_ | ConvertFrom-Json } | Where-Object { $_.etapa -eq 'aprobacion' -and $_.veredicto -eq 'pass' })
+$aprobaciones = @(Get-Content -Encoding utf8 $logPath | Where-Object { $_.Trim().Length -gt 0 } | ForEach-Object { $_ | ConvertFrom-Json } | Where-Object { $_.etapa -eq 'aprobacion' -and $_.veredicto -eq 'pass' })
 if ($aprobaciones.Count -eq 0) {
   Write-Output "bossdream-learning-publish BLOCKED: '$logPath' no tiene una entrada 'aprobacion' con veredicto 'pass' - tutorial NO publicado."
   exit 1

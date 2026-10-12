@@ -12,7 +12,7 @@ if (-not (Test-Path $artifactPath)) {
   exit 0
 }
 
-$artifact = Get-Content $artifactPath -Raw | ConvertFrom-Json
+$artifact = Get-Content -Encoding utf8 $artifactPath -Raw | ConvertFrom-Json
 if ($artifact.PSObject.Properties.Name -contains 'estado') {
   $artifact.estado = 'consumido'
 } else {

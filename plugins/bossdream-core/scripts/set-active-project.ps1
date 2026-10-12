@@ -32,7 +32,7 @@ switch ($Action) {
   }
 
   'status' {
-    $current = if (Test-Path $activeProjectFile) { (Get-Content $activeProjectFile -Raw).Trim() } else { $null }
+    $current = if (Test-Path $activeProjectFile) { (Get-Content -Encoding utf8 $activeProjectFile -Raw).Trim() } else { $null }
     $available = @(Get-AvailableSlugs)
     if ($current) {
       Write-Output "active-project: '$current' esta activo."
@@ -64,9 +64,9 @@ switch ($Action) {
     New-Item -ItemType Directory -Force -Path $claudeDir | Out-Null
     [System.IO.File]::WriteAllText($activeProjectFile, $ProjectSlug)
 
-    $project = Get-Content $projectJsonPath -Raw | ConvertFrom-Json
+    $project = Get-Content -Encoding utf8 $projectJsonPath -Raw | ConvertFrom-Json
     $validationPath = Join-Path $projectsRoot "$ProjectSlug/.bossdream-project/validation.json"
-    $overallStatus = if (Test-Path $validationPath) { (Get-Content $validationPath -Raw | ConvertFrom-Json).overallStatus } else { 'desconocido' }
+    $overallStatus = if (Test-Path $validationPath) { (Get-Content -Encoding utf8 $validationPath -Raw | ConvertFrom-Json).overallStatus } else { 'desconocido' }
 
     Write-Output "active-project ACTIVATED: '$ProjectSlug' (clasificacion: $($project.classification), validation.json: $overallStatus)."
     exit 0

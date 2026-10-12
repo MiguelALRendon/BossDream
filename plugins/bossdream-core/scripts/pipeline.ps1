@@ -6,7 +6,7 @@ $ErrorActionPreference = 'Stop'
 if (-not $ProjectDir) { $ProjectDir = (Get-Location).Path }
 $cfgPath = Join-Path $ProjectDir 'pipeline.json'
 if (-not (Test-Path $cfgPath)) { Write-Output 'pipeline: sin pipeline.json en el proyecto, nada que correr'; exit 0 }
-$cfg = Get-Content $cfgPath -Raw | ConvertFrom-Json
+$cfg = Get-Content -Encoding utf8 $cfgPath -Raw | ConvertFrom-Json
 
 $testEnabled = $false
 $testBdd = $false
@@ -15,7 +15,7 @@ $styleEnabled = $false
 $bossdreamPath = Join-Path $ProjectDir 'bossdream.json'
 if (Test-Path $bossdreamPath) {
   try {
-    $bd = Get-Content $bossdreamPath -Raw | ConvertFrom-Json
+    $bd = Get-Content -Encoding utf8 $bossdreamPath -Raw | ConvertFrom-Json
     $t = $bd.testing; if ($t) { $testEnabled = ($t.enabled -eq $true); $testBdd = ($t.bdd -eq $true); $testProject = [string]$t.project }
     if ($bd.style) { $styleEnabled = ($bd.style.enabled -eq $true) }
   } catch {}

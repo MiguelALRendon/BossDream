@@ -10,7 +10,7 @@ $themeSource = ''
 $vendorExempt = @()
 $bossdreamPath = Join-Path $ProjectDir 'bossdream.json'
 if (Test-Path $bossdreamPath) {
-  try { $st = (Get-Content $bossdreamPath -Raw | ConvertFrom-Json).style; if ($st) { $themeSource = ([string]$st.themeSource) -replace '\\', '/'; if ($st.vendorExempt) { $vendorExempt = @($st.vendorExempt) } } } catch {}
+  try { $st = (Get-Content -Encoding utf8 $bossdreamPath -Raw | ConvertFrom-Json).style; if ($st) { $themeSource = ([string]$st.themeSource) -replace '\\', '/'; if ($st.vendorExempt) { $vendorExempt = @($st.vendorExempt) } } } catch {}
 }
 
 $files = Get-ProjectFiles $ProjectDir @('*.css', '*.scss')

@@ -10,11 +10,13 @@ $ext = [System.IO.Path]::GetExtension($path).ToLower()
 $proj = [string]$j.cwd
 if (-not $proj) { $proj = $env:CLAUDE_PROJECT_DIR }
 if (-not $proj) { exit 0 }
+Import-Module (Join-Path $PSScriptRoot 'plugin-paths.psm1')
+$proj = Get-ProjectRoot $proj
 
 # extensiones de codigo desde bossdream.json: default universal + lo que anexo el stack-pack en /bossdream-init
 $codeExt = @('.css', '.scss', '.sql', '.ps1')
 try {
-  $bd = Get-Content (Join-Path $proj 'bossdream.json') -Raw | ConvertFrom-Json
+  $bd = Get-Content -Encoding utf8 (Join-Path $proj 'bossdream.json') -Raw | ConvertFrom-Json
   if ($bd.codeExtensions) { $codeExt = @($bd.codeExtensions) }
 } catch {}
 if ($codeExt -notcontains $ext) { exit 0 }

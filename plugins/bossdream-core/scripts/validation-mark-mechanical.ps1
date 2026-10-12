@@ -21,7 +21,7 @@ function Get-Fingerprint([string]$Path) {
   return (Get-FileHash -Path $Path -Algorithm SHA256).Hash
 }
 
-$validation = Get-Content $validationPath -Raw | ConvertFrom-Json
+$validation = Get-Content -Encoding utf8 $validationPath -Raw | ConvertFrom-Json
 
 $updated = @()
 $skippedNotVerified = @()

@@ -12,7 +12,7 @@ if (-not (Test-Path $activeProjectFile)) {
   Write-Output "emergency-override: no hay proyecto activo (.claude/.active-project) - nada que destrabar."
   exit 1
 }
-$slug = (Get-Content $activeProjectFile -Raw).Trim()
+$slug = (Get-Content -Encoding utf8 $activeProjectFile -Raw).Trim()
 if (-not $slug) {
   Write-Output "emergency-override: .claude/.active-project esta vacio."
   exit 1
@@ -26,7 +26,7 @@ if (-not (Test-Path $dotDir)) {
 
 $overridesPath = Join-Path $dotDir 'emergency-overrides.json'
 if (Test-Path $overridesPath) {
-  $overridesRaw = Get-Content $overridesPath -Raw | ConvertFrom-Json
+  $overridesRaw = Get-Content -Encoding utf8 $overridesPath -Raw | ConvertFrom-Json
   $overrides = @($overridesRaw)
 } else {
   $overrides = @()

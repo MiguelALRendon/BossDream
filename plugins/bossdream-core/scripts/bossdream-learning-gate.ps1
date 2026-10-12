@@ -18,7 +18,7 @@ if (-not $ProjectSlug) {
     ([ordered]@{ status = 'blocked'; razon = @('no hay proyecto activo (.claude/.active-project) y no se paso -ProjectSlug') } | ConvertTo-Json -Compress)
     exit 1
   }
-  $ProjectSlug = (Get-Content $activeProjectFile -Raw).Trim()
+  $ProjectSlug = (Get-Content -Encoding utf8 $activeProjectFile -Raw).Trim()
 }
 
 $dotDir = Join-Path $ProjectDir "bossdream_projects/$ProjectSlug/.bossdream-project"
@@ -26,7 +26,7 @@ $patternDetectScript = Join-Path $PSScriptRoot 'pattern-detect.ps1'
 
 function Get-EvidenceGateVeredicto([string]$LogPath) {
   if (-not (Test-Path $LogPath)) { return @{ veredicto = 'blocked'; detalle = "log de operaciones no encontrado en '$LogPath'" } }
-  $lineas = @(Get-Content $LogPath | Where-Object { $_.Trim().Length -gt 0 })
+  $lineas = @(Get-Content -Encoding utf8 $LogPath | Where-Object { $_.Trim().Length -gt 0 })
   if ($lineas.Count -eq 0) { return @{ veredicto = 'blocked'; detalle = "log de operaciones vacio en '$LogPath'" } }
   return @{ veredicto = 'pass'; detalle = "$($lineas.Count) corridas registradas en '$LogPath'" }
 }

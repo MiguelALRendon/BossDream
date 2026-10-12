@@ -114,7 +114,7 @@ if (-not (Test-Path $InventoryPath)) {
   exit 1
 }
 
-$inventory = Get-Content $InventoryPath -Raw | ConvertFrom-Json
+$inventory = Get-Content -Encoding utf8 $InventoryPath -Raw | ConvertFrom-Json
 
 $missing = [System.Collections.Generic.List[string]]::new()
 $missing.AddRange((Test-RequiredKeys $inventory))

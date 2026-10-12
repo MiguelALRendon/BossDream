@@ -12,7 +12,7 @@ $ErrorActionPreference = 'Stop'
 
 # Un array PowerShell pasado a un proceso externo (& powershell -File) se trunca al primer elemento — BatchInputFile es el puente para invocacion entre procesos (usa validation-check.ps1); DocumentPaths/DocTypes/Classifications siguen siendo el modo batch in-process (tests standalone).
 if ($BatchInputFile) {
-  $batchItems = Get-Content -Raw -Path $BatchInputFile | ConvertFrom-Json
+  $batchItems = Get-Content -Encoding utf8 -Raw -Path $BatchInputFile | ConvertFrom-Json
   $DocumentPaths = @($batchItems | ForEach-Object { $_.path })
   $DocTypes = @($batchItems | ForEach-Object { $_.docType })
   $Classifications = @($batchItems | ForEach-Object { $_.classification })

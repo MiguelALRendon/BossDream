@@ -15,10 +15,12 @@ if ([System.IO.Path]::GetExtension($path).ToLower() -ne '.md') { exit 0 }
 $proj = [string]$j.cwd
 if (-not $proj) { $proj = $env:CLAUDE_PROJECT_DIR }
 if (-not $proj) { exit 0 }
+Import-Module (Join-Path $PSScriptRoot 'plugin-paths.psm1')
+$proj = Get-ProjectRoot $proj
 
 $activeProjectFile = Join-Path $proj '.claude/.active-project'
 if (-not (Test-Path $activeProjectFile)) { exit 0 }
-$slug = (Get-Content $activeProjectFile -Raw).Trim()
+$slug = (Get-Content -Encoding utf8 $activeProjectFile -Raw).Trim()
 if (-not $slug) { exit 0 }
 
 $destDir = Join-Path $proj "bossdream_projects/$slug"
@@ -33,7 +35,7 @@ $docKey = $editedFull.Substring($destDirFull.Length).TrimStart('\', '/') -replac
 
 $validationPath = Join-Path $destDirFull '.bossdream-project/validation.json'
 if (-not (Test-Path $validationPath)) { exit 0 }
-$validation = Get-Content $validationPath -Raw | ConvertFrom-Json
+$validation = Get-Content -Encoding utf8 $validationPath -Raw | ConvertFrom-Json
 
 # Solo actua sobre documentos ya registrados -- uno nuevo requiere interpretacion, no solo reabrir estado.
 if (-not ($validation.documents.PSObject.Properties.Name -contains $docKey)) { exit 0 }

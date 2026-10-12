@@ -39,7 +39,7 @@ function Add-TestToUs($node, [string]$UsId, [string]$TcId) {
 }
 
 # --- 1. Registra el TC bajo su US en traceability.json ---
-$trace = if (Test-Path $tracePath) { Get-Content $tracePath -Raw | ConvertFrom-Json } else { [PSCustomObject]@{} }
+$trace = if (Test-Path $tracePath) { Get-Content -Encoding utf8 $tracePath -Raw | ConvertFrom-Json } else { [PSCustomObject]@{} }
 $found = Add-TestToUs $trace $UsId $TcId
 if (-not $found) {
   Write-Output "testcase-register AVISO: no se encontro '$UsId' en traceability.json - el TC se registra en validation.json de todas formas, pero revisa la trazabilidad a mano (o corre /bossdream-update-docs)."
@@ -47,7 +47,7 @@ if (-not $found) {
 $trace | ConvertTo-Json -Depth 10 | Set-Content $tracePath -Encoding utf8
 
 # --- 2. Agrega entrada pending en validation.json y fuerza overallStatus a blocked (decision 2b: solo validation-check.ps1 escribe "ready", este script reabre) ---
-$validation = Get-Content $validationPath -Raw | ConvertFrom-Json
+$validation = Get-Content -Encoding utf8 $validationPath -Raw | ConvertFrom-Json
 $docKey = "tests/cases/$TcId.md"
 $newEntry = [PSCustomObject]@{ status = 'pending'; documentFingerprint = ''; checks = @() }
 if ($validation.documents.PSObject.Properties.Name -contains $docKey) {
@@ -63,7 +63,7 @@ $cachePath = Join-Path $dotDir 'tc-summary-cache.json'
 $casosDir = Join-Path $destDir 'tests/cases'
 
 if (Test-Path $cachePath) {
-  $cache = Get-Content $cachePath -Raw | ConvertFrom-Json
+  $cache = Get-Content -Encoding utf8 $cachePath -Raw | ConvertFrom-Json
   $total = [int]$cache.total + 1
   $pasaron = [int]$cache.pasaron
   $fallaron = [int]$cache.fallaron

@@ -18,7 +18,7 @@ if (-not (Test-Path $LogPath)) {
   exit 1
 }
 
-$entradas = @(Get-Content $LogPath | Where-Object { $_.Trim().Length -gt 0 } | ForEach-Object { $_ | ConvertFrom-Json })
+$entradas = @(Get-Content -Encoding utf8 $LogPath | Where-Object { $_.Trim().Length -gt 0 } | ForEach-Object { $_ | ConvertFrom-Json })
 $grupos = [ordered]@{}
 for ($i = 0; $i -lt $entradas.Count; $i++) {
   $key = Get-GrupoKey $entradas[$i]

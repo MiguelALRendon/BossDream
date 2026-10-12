@@ -34,7 +34,7 @@ function Get-AuditoriaDesdeRegistro($Path) {
   if (-not (Test-Path $Path)) {
     return [ordered]@{ status = 'blocked'; razon = @("components-registry.json no encontrado en '$Path'") }
   }
-  $registro = Get-Content $Path -Raw | ConvertFrom-Json
+  $registro = Get-Content -Encoding utf8 $Path -Raw | ConvertFrom-Json
   $componentes = @($registro.componentes)
   $nombres = @($componentes | ForEach-Object { $_.nombre })
   $out = @($componentes | ForEach-Object { Get-VeredictoComponente $_ $nombres })

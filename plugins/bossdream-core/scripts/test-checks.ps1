@@ -12,7 +12,7 @@ function Get-BossdreamTesting($ProjectDir) {
   $bossdreamPath = Join-Path $ProjectDir 'bossdream.json'
   if (Test-Path $bossdreamPath) {
     try {
-      $bd = Get-Content $bossdreamPath -Raw | ConvertFrom-Json
+      $bd = Get-Content -Encoding utf8 $bossdreamPath -Raw | ConvertFrom-Json
       $t = $bd.testing
       if ($t) { $testEnabled = ($t.enabled -eq $true); $testProject = [string]$t.project }
     } catch {}
@@ -38,7 +38,7 @@ function Get-CodeCorrectness($ProjectDir) {
 }
 
 function Get-YamlValidationError($Path) {
-  $content = Get-Content $Path -Raw
+  $content = Get-Content -Encoding utf8 $Path -Raw
   $yamlModule = Get-Module -ListAvailable -Name powershell-yaml | Select-Object -First 1
   if ($yamlModule) {
     Import-Module powershell-yaml -ErrorAction Stop
@@ -51,7 +51,7 @@ function Get-YamlValidationError($Path) {
 
 function Test-ContractFile($Path) {
   if ($Path -like '*.schema.json') {
-    try { Get-Content $Path -Raw | ConvertFrom-Json -ErrorAction Stop | Out-Null; return $null }
+    try { Get-Content -Encoding utf8 $Path -Raw | ConvertFrom-Json -ErrorAction Stop | Out-Null; return $null }
     catch { return $_.Exception.Message }
   }
   return Get-YamlValidationError $Path
@@ -138,7 +138,7 @@ function Get-RegressionSafety($ProjectDir, $DiffPath) {
 
 function Get-InventoryFlows($InventoryPath) {
   if (-not (Test-Path $InventoryPath)) { return , @() }
-  try { $inventory = Get-Content $InventoryPath -Raw | ConvertFrom-Json } catch { return , @() }
+  try { $inventory = Get-Content -Encoding utf8 $InventoryPath -Raw | ConvertFrom-Json } catch { return , @() }
   return , @($inventory.flows)
 }
 

@@ -14,4 +14,14 @@ function Get-CanonicalPluginScriptsDir([string]$ProjectDir) {
   }
   return Join-Path $candidates[0].FullName 'scripts'
 }
-Export-ModuleMember -Function Get-CanonicalPluginScriptsDir
+function Get-ProjectRoot([string]$Start) {
+  $homeDir = [Environment]::GetFolderPath('UserProfile')
+  $dir = $Start
+  while ($dir) {
+    if (($dir -ne $homeDir) -and (Test-Path (Join-Path $dir '.claude') -PathType Container)) { return $dir }
+    $dir = Split-Path $dir -Parent
+  }
+  if ($env:CLAUDE_PROJECT_DIR) { return $env:CLAUDE_PROJECT_DIR }
+  return $Start
+}
+Export-ModuleMember -Function Get-CanonicalPluginScriptsDir, Get-ProjectRoot

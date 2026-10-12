@@ -5,7 +5,7 @@ if (-not $ProjectDir) { $ProjectDir = (Get-Location).Path }
 $active = Join-Path $ProjectDir '.claude/.active-plan'
 $targets = @()
 if (Test-Path $active) {
-  $f = (Get-Content $active -Raw).Trim()
+  $f = (Get-Content -Encoding utf8 $active -Raw).Trim()
   $p = Join-Path $ProjectDir "plans/$f/tasks.md"
   if (Test-Path $p) { $targets += $p }
 }
@@ -19,7 +19,7 @@ if ($targets.Count -eq 0) { Write-Output 'tasks OK (sin tasks.md)'; exit 0 }
 
 $open = @()
 foreach ($t in $targets) {
-  $lines = Get-Content $t
+  $lines = Get-Content -Encoding utf8 $t
   foreach ($l in $lines) { if ($l -match '^\s*[-*]\s*\[\s\]') { $open += "$t : $($l.Trim())" } }
 }
 if ($open.Count -gt 0) { Write-Output ("TASKS PENDIENTES:`n" + ($open -join "`n")); exit 1 }

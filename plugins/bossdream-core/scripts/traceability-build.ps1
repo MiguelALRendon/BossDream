@@ -30,7 +30,7 @@ function Get-AggregateSignature($files) {
 
 $preSignature = Get-AggregateSignature (Get-TraceabilityInputFiles)
 if (Test-Path $cachePath) {
-  $cache = Get-Content $cachePath -Raw | ConvertFrom-Json
+  $cache = Get-Content -Encoding utf8 $cachePath -Raw | ConvertFrom-Json
   if ($cache.signature -eq $preSignature) {
     Write-Output "traceability-build: sin cambios detectados (cache hit) - no reconstruido."
     exit 0

@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 
 # Un array PowerShell pasado a un proceso externo (& powershell -File) se trunca al primer elemento — DocumentPathsFile es el puente para invocacion entre procesos (usa validation-check.ps1); DocumentPaths sigue siendo el modo batch in-process (tests standalone).
 if ($DocumentPathsFile) {
-  $raw = Get-Content -Raw -Path $DocumentPathsFile
+  $raw = Get-Content -Encoding utf8 -Raw -Path $DocumentPathsFile
   $DocumentPaths = $raw | ConvertFrom-Json
 }
 

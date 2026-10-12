@@ -128,7 +128,7 @@ if ($Check -eq 'diff-intelligence') {
 }
 
 if (-not $Plan -or -not (Test-Path $Plan)) { New-BlockedResult "plan-draft.json no encontrado en '$Plan'" }
-$planObj = Get-Content $Plan -Raw | ConvertFrom-Json
+$planObj = Get-Content -Encoding utf8 $Plan -Raw | ConvertFrom-Json
 
 if ($Check -eq 'plan-to-code-traceability') {
   $result = Get-PlanToCodeTraceability $planObj $Diff

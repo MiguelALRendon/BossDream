@@ -13,7 +13,7 @@ if (-not (Test-Path $progressPath)) {
   exit 1
 }
 
-$progress = Get-Content $progressPath -Raw | ConvertFrom-Json
+$progress = Get-Content -Encoding utf8 $progressPath -Raw | ConvertFrom-Json
 $planned = @($progress.planned)
 $pending = @($progress.pending)
 

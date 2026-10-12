@@ -165,7 +165,7 @@ if (-not (Test-Path $PlanPath)) {
   ([ordered]@{ status = 'blocked'; razon = @("plan-draft.json no encontrado en '$PlanPath'") } | ConvertTo-Json -Compress -Depth 10)
   exit 1
 }
-$plan = Get-Content $PlanPath -Raw | ConvertFrom-Json
+$plan = Get-Content -Encoding utf8 $PlanPath -Raw | ConvertFrom-Json
 
 $nivelVelocidad = Get-NivelVelocidad $plan
 Write-PlanningArtifact -Plan $plan -NivelVelocidad $nivelVelocidad -ProjectDir $ProjectDir

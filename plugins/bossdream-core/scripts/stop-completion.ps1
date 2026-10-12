@@ -4,6 +4,8 @@ $j = $null
 $proj = $env:CLAUDE_PROJECT_DIR
 if ($raw) { try { $j = $raw | ConvertFrom-Json; if ($j.cwd) { $proj = $j.cwd } } catch {} }
 if (-not $proj) { $proj = (Get-Location).Path }
+Import-Module (Join-Path $PSScriptRoot 'plugin-paths.psm1')
+$proj = Get-ProjectRoot $proj
 
 # stop_hook_active evita re-entrada infinita cuando el propio hook provoco la continuacion
 if ($j -and $j.stop_hook_active -eq $true) { exit 0 }
@@ -17,12 +19,12 @@ Remove-Item $marker -Force -ErrorAction SilentlyContinue
 $testReminder = ''
 $bossdreamTestPath = Join-Path $proj 'bossdream.json'
 if (Test-Path $bossdreamTestPath) {
-  try { $tcfg = (Get-Content $bossdreamTestPath -Raw | ConvertFrom-Json).testing; if ($tcfg -and $tcfg.enabled -ne $true) { $testReminder = 'Recordatorio: las pruebas unitarias estan APAGADAS (testing.enabled=false); este cambio no queda cubierto por unit tests. Enciende el switch y define testing.project cuando quieras cobertura.' } } catch {}
+  try { $tcfg = (Get-Content -Encoding utf8 $bossdreamTestPath -Raw | ConvertFrom-Json).testing; if ($tcfg -and $tcfg.enabled -ne $true) { $testReminder = 'Recordatorio: las pruebas unitarias estan APAGADAS (testing.enabled=false); este cambio no queda cubierto por unit tests. Enciende el switch y define testing.project cuando quieras cobertura.' } } catch {}
 }
 
 $completionPath = Join-Path $proj 'completion.json'
 if (-not (Test-Path $completionPath)) { exit 0 }
-$completion = Get-Content $completionPath -Raw | ConvertFrom-Json
+$completion = Get-Content -Encoding utf8 $completionPath -Raw | ConvertFrom-Json
 $maxBlocks = if ($completion.maxBlocks) { [int]$completion.maxBlocks } else { 8 }
 
 # scripts hermanos (pipeline, tasks-complete) viven junto a este, tanto en el plugin como en .claude/bossdream-hooks/
@@ -36,7 +38,7 @@ if ($LASTEXITCODE -ne 0) { $failures += ($tk -join "`n") }
 
 $statePath = Join-Path $proj '.claude/.completion-state.json'
 $count = 0
-if (Test-Path $statePath) { try { $count = [int]((Get-Content $statePath -Raw | ConvertFrom-Json).blocks) } catch { $count = 0 } }
+if (Test-Path $statePath) { try { $count = [int]((Get-Content -Encoding utf8 $statePath -Raw | ConvertFrom-Json).blocks) } catch { $count = 0 } }
 
 if ($failures.Count -eq 0) {
   if (Test-Path $statePath) { Remove-Item $statePath -Force }

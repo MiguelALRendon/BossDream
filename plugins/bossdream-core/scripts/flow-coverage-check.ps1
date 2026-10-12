@@ -4,8 +4,8 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 
-$flow = Get-Content $FlowDefinitionPath -Raw | ConvertFrom-Json
-$catalog = Get-Content $CatalogPath -Raw | ConvertFrom-Json
+$flow = Get-Content -Encoding utf8 $FlowDefinitionPath -Raw | ConvertFrom-Json
+$catalog = Get-Content -Encoding utf8 $CatalogPath -Raw | ConvertFrom-Json
 
 # Transiciones esperadas (all-transitions coverage, ISTQB): cada paso->siguiente del flujo lineal,
 # mas cualquier transicion de rollback/compensacion declarada explicitamente.

@@ -45,7 +45,7 @@ $mdFiles = Get-ChildItem -Path $destDir -Recurse -Filter '*.md' -File -ErrorActi
 $signature = Get-AggregateSignature $mdFiles
 
 if (Test-Path $cachePath) {
-  $cache = Get-Content $cachePath -Raw | ConvertFrom-Json
+  $cache = Get-Content -Encoding utf8 $cachePath -Raw | ConvertFrom-Json
   if ($cache.signature -eq $signature) {
     (@{ status = $cache.status; findings = @($cache.findings) } | ConvertTo-Json -Compress -Depth 4)
     exit 0
@@ -53,12 +53,12 @@ if (Test-Path $cachePath) {
 }
 
 $tracePath = Join-Path $dotDir 'traceability.json'
-$trace = if (Test-Path $tracePath) { Get-Content $tracePath -Raw | ConvertFrom-Json } else { [PSCustomObject]@{} }
+$trace = if (Test-Path $tracePath) { Get-Content -Encoding utf8 $tracePath -Raw | ConvertFrom-Json } else { [PSCustomObject]@{} }
 
 $projectId = $null
 $projectJsonPath = Join-Path $dotDir 'project.json'
 if (Test-Path $projectJsonPath) {
-  $projectJson = Get-Content $projectJsonPath -Raw | ConvertFrom-Json
+  $projectJson = Get-Content -Encoding utf8 $projectJsonPath -Raw | ConvertFrom-Json
   if ($projectJson.id) { $projectId = $projectJson.id }
 }
 

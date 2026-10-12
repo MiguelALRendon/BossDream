@@ -94,6 +94,14 @@ Describe 'plan-lock.ps1' {
     Get-Decision $r | Should -Be 'deny'
   }
 
+  It 'en modo plan deniega editar codigo aunque el cwd sea una subcarpeta del proyecto' {
+    Set-Content (Join-Path $script:Proj '.claude/.work-mode') -Value 'plan' -NoNewline
+    $sub = Join-Path $script:Proj 'src/modulo'
+    New-Item -ItemType Directory -Force -Path $sub | Out-Null
+    $r = Invoke-Hook 'plan-lock' @{ cwd = $sub; tool_input = @{ file_path = (Join-Path $sub 'x.ps1') } }
+    Get-Decision $r | Should -Be 'deny'
+  }
+
   It 'en modo plan permite editar un .md' {
     Set-Content (Join-Path $script:Proj '.claude/.work-mode') -Value 'plan' -NoNewline
     $r = Invoke-Hook 'plan-lock' @{ cwd = $script:Proj; tool_input = @{ file_path = (Join-Path $script:Proj 'plan.md') } }

@@ -6,6 +6,8 @@ try { $j = $raw | ConvertFrom-Json } catch { exit 0 }
 $proj = $j.cwd
 if (-not $proj) { $proj = $env:CLAUDE_PROJECT_DIR }
 if (-not $proj) { exit 0 }
+Import-Module (Join-Path $PSScriptRoot 'plugin-paths.psm1')
+$proj = Get-ProjectRoot $proj
 
 $prompt = [string]$j.prompt
 $dir = Join-Path $proj '.claude'

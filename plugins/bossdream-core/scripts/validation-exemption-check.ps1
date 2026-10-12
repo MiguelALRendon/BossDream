@@ -15,7 +15,7 @@ function Write-NotFound {
 
 if (-not (Test-Path $validationPath)) { Write-NotFound }
 
-$validation = Get-Content $validationPath -Raw | ConvertFrom-Json
+$validation = Get-Content -Encoding utf8 $validationPath -Raw | ConvertFrom-Json
 $hasDoc = ($validation.PSObject.Properties.Name -contains 'documents') -and ($validation.documents.PSObject.Properties.Name -contains $File)
 if (-not $hasDoc) { Write-NotFound }
 

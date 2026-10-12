@@ -6,17 +6,19 @@ try { $j = $raw | ConvertFrom-Json } catch { exit 0 }
 $proj = [string]$j.cwd
 if (-not $proj) { $proj = $env:CLAUDE_PROJECT_DIR }
 if (-not $proj) { exit 0 }
+Import-Module (Join-Path $PSScriptRoot 'plugin-paths.psm1')
+$proj = Get-ProjectRoot $proj
 
 $activeProjectFile = Join-Path $proj '.claude/.active-project'
 if (-not (Test-Path $activeProjectFile)) { exit 0 }
-$slug = (Get-Content $activeProjectFile -Raw).Trim()
+$slug = (Get-Content -Encoding utf8 $activeProjectFile -Raw).Trim()
 if (-not $slug) { exit 0 }
 
 $dotDir = Join-Path $proj "bossdream_projects/$slug/.bossdream-project"
 $validationPath = Join-Path $dotDir 'validation.json'
 $status = $null
 if (Test-Path $validationPath) {
-  try { $status = (Get-Content $validationPath -Raw | ConvertFrom-Json).overallStatus } catch { $status = $null }
+  try { $status = (Get-Content -Encoding utf8 $validationPath -Raw | ConvertFrom-Json).overallStatus } catch { $status = $null }
 }
 
 $projectJsonPath = Join-Path $dotDir 'project.json'

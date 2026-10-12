@@ -7,25 +7,27 @@ try { $j = $raw | ConvertFrom-Json } catch { exit 0 }
 $proj = [string]$j.cwd
 if (-not $proj) { $proj = $env:CLAUDE_PROJECT_DIR }
 if (-not $proj) { exit 0 }
+Import-Module (Join-Path $PSScriptRoot 'plugin-paths.psm1')
+$proj = Get-ProjectRoot $proj
 
 $prompt = [string]$j.prompt
 if (-not (Test-BossdreamPlanPrompt $prompt)) { exit 0 }
 
 $activeProjectFile = Join-Path $proj '.claude/.active-project'
 if (-not (Test-Path $activeProjectFile)) { exit 0 }
-$slug = (Get-Content $activeProjectFile -Raw).Trim()
+$slug = (Get-Content -Encoding utf8 $activeProjectFile -Raw).Trim()
 if (-not $slug) { exit 0 }
 
 $destDir = Join-Path $proj "bossdream_projects/$slug"
 $dotDir = Join-Path $destDir '.bossdream-project'
 $validationPath = Join-Path $dotDir 'validation.json'
 if (-not (Test-Path $validationPath)) { exit 0 }
-try { $validation = Get-Content $validationPath -Raw | ConvertFrom-Json } catch { exit 0 }
+try { $validation = Get-Content -Encoding utf8 $validationPath -Raw | ConvertFrom-Json } catch { exit 0 }
 
 if ($validation.overallStatus -ne 'ready') { exit 0 }
 
 $tracePath = Join-Path $dotDir 'traceability.json'
-$trace = if (Test-Path $tracePath) { Get-Content $tracePath -Raw | ConvertFrom-Json } else { [PSCustomObject]@{} }
+$trace = if (Test-Path $tracePath) { Get-Content -Encoding utf8 $tracePath -Raw | ConvertFrom-Json } else { [PSCustomObject]@{} }
 
 $epicCount = 0
 $featureCount = 0
@@ -48,7 +50,7 @@ $sizeHint = if ($epicCount -gt 1) { 'monstruo (una sesion por Epic)' }
   else { 'pequeno (una sola corrida)' }
 
 $progressPath = Join-Path $dotDir 'plan-progress.json'
-$progress = if (Test-Path $progressPath) { Get-Content $progressPath -Raw | ConvertFrom-Json } else { [PSCustomObject]@{ status = 'not-started'; planned = @(); pending = @() } }
+$progress = if (Test-Path $progressPath) { Get-Content -Encoding utf8 $progressPath -Raw | ConvertFrom-Json } else { [PSCustomObject]@{ status = 'not-started'; planned = @(); pending = @() } }
 $plannedList = ($progress.planned -join ', ')
 $pendingList = ($progress.pending -join ', ')
 

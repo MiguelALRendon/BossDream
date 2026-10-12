@@ -12,7 +12,7 @@ if (-not $features) { Write-Output 'gherkin-check: sin archivos .feature, nada q
 
 $problems = @()
 foreach ($f in $features) {
-  $text = Get-Content $f.FullName -Raw
+  $text = Get-Content -Encoding utf8 $f.FullName -Raw
   $rel = $f.FullName.Substring($ProjectDir.Length).TrimStart('\', '/')
   $happy = ([regex]::Matches($text, '(?im)^\s*@[^\r\n]*\bhappy\b')).Count
   $scenarios = ([regex]::Matches($text, '(?im)^\s*(Scenario|Escenario)\b')).Count

@@ -5,10 +5,11 @@ $j = $null
 $proj = $env:CLAUDE_PROJECT_DIR
 if ($raw) { try { $j = $raw | ConvertFrom-Json; if ($j.cwd) { $proj = $j.cwd } } catch {} }
 if (-not $proj) { $proj = (Get-Location).Path }
+$proj = Get-ProjectRoot $proj
 
 $activeProjectFile = Join-Path $proj '.claude/.active-project'
 if (-not (Test-Path $activeProjectFile)) { exit 0 }
-$slug = (Get-Content $activeProjectFile -Raw).Trim()
+$slug = (Get-Content -Encoding utf8 $activeProjectFile -Raw).Trim()
 if (-not $slug) { exit 0 }
 
 $dotDir = Join-Path $proj "bossdream_projects/$slug/.bossdream-project"

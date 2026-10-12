@@ -16,13 +16,13 @@ $projectPath = Join-Path $dotDir 'project.json'
 
 if (-not (Test-Path $validationPath)) { Write-Output "validation-check: no existe validation.json para '$ProjectSlug' — corre /bossdream-project primero."; exit 1 }
 
-$validation = Get-Content $validationPath -Raw | ConvertFrom-Json
-$project = if (Test-Path $projectPath) { Get-Content $projectPath -Raw | ConvertFrom-Json } else { $null }
+$validation = Get-Content -Encoding utf8 $validationPath -Raw | ConvertFrom-Json
+$project = if (Test-Path $projectPath) { Get-Content -Encoding utf8 $projectPath -Raw | ConvertFrom-Json } else { $null }
 $classification = if ($project) { $project.classification } else { $null }
 
 $semanticVerdicts = $null
 if ($SemanticVerdictsPath -and (Test-Path $SemanticVerdictsPath)) {
-  $semanticVerdicts = Get-Content $SemanticVerdictsPath -Raw | ConvertFrom-Json
+  $semanticVerdicts = Get-Content -Encoding utf8 $SemanticVerdictsPath -Raw | ConvertFrom-Json
 }
 
 function Get-Fingerprint([string]$Path) {

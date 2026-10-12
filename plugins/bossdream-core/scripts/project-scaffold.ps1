@@ -30,10 +30,10 @@ Copy-Item (Join-Path $pluginRoot 'scripts/traceability-build.ps1') (Join-Path $h
 # Fusiona (merge, nunca overwrite) el fragmento de hooks en .claude/settings.json del proyecto consumidor.
 $hooksSnippetPath = Join-Path $templatesRoot 'settings.hooks-snippet.json'
 if (Test-Path $hooksSnippetPath) {
-  $snippet = Get-Content $hooksSnippetPath -Raw | ConvertFrom-Json
+  $snippet = Get-Content -Encoding utf8 $hooksSnippetPath -Raw | ConvertFrom-Json
   $settingsPath = Join-Path $claudeDir 'settings.json'
   if (Test-Path $settingsPath) {
-    $settings = Get-Content $settingsPath -Raw | ConvertFrom-Json
+    $settings = Get-Content -Encoding utf8 $settingsPath -Raw | ConvertFrom-Json
   } else {
     $settings = [PSCustomObject]@{}
   }
@@ -67,8 +67,8 @@ if (Test-Path $hooksSnippetPath) {
 $gitignoreSnippetPath = Join-Path $templatesRoot 'gitignore-snippet.txt'
 if (Test-Path $gitignoreSnippetPath) {
   $gitignorePath = Join-Path $ProjectDir '.gitignore'
-  $snippetLines = @(Get-Content $gitignoreSnippetPath)
-  $existingLines = if (Test-Path $gitignorePath) { @(Get-Content $gitignorePath) } else { @() }
+  $snippetLines = @(Get-Content -Encoding utf8 $gitignoreSnippetPath)
+  $existingLines = if (Test-Path $gitignorePath) { @(Get-Content -Encoding utf8 $gitignorePath) } else { @() }
   $linesToAdd = @($snippetLines | Where-Object { $existingLines -notcontains $_ })
   if ($linesToAdd.Count -gt 0) {
     Add-Content -Path $gitignorePath -Value $linesToAdd -Encoding utf8
@@ -94,7 +94,7 @@ Copy-Item (Join-Path $projectTemplate 'requirements.md') (Join-Path $destDir 're
 Copy-Item (Join-Path $projectTemplate 'tests/test-approach.md') (Join-Path $destDir 'tests/test-approach.md') -Force
 Copy-Item (Join-Path $projectTemplate 'tests/_templates/test-case.md') (Join-Path $destDir 'tests/_templates/test-case.md') -Force
 
-$project = Get-Content (Join-Path $templatesRoot 'project.json') -Raw | ConvertFrom-Json
+$project = Get-Content -Encoding utf8 (Join-Path $templatesRoot 'project.json') -Raw | ConvertFrom-Json
 $project.id = $ProjectId
 $project.name = $ProjectName
 $project.classification = $Classification

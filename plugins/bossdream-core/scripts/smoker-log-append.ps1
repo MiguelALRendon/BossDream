@@ -10,14 +10,14 @@ if (-not (Test-Path $VeredictoPath)) {
   throw "VeredictoPath no encontrado: $VeredictoPath"
 }
 
-$veredictoData = Get-Content $VeredictoPath -Raw | ConvertFrom-Json
+$veredictoData = Get-Content -Encoding utf8 $VeredictoPath -Raw | ConvertFrom-Json
 
 $dotDir = Join-Path $ProjectDir '.bossdream-project'
 $logPath = Join-Path $dotDir 'smoker-log.json'
 
 $entries = @()
 if (Test-Path $logPath) {
-  $existing = Get-Content $logPath -Raw | ConvertFrom-Json
+  $existing = Get-Content -Encoding utf8 $logPath -Raw | ConvertFrom-Json
   $entries = @($existing)
 }
 

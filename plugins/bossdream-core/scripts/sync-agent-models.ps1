@@ -22,7 +22,7 @@ if (-not (Test-Path $configPath)) {
   exit 0
 }
 
-try { $config = Get-Content $configPath -Raw | ConvertFrom-Json } catch {
+try { $config = Get-Content -Encoding utf8 $configPath -Raw | ConvertFrom-Json } catch {
   Write-Output "sync-agent-models: bossdream.json invalido, nada que sincronizar."
   exit 0
 }
